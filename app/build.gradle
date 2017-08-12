@@ -6,7 +6,7 @@ android {
     dataBinding.enabled = true
     defaultConfig {
         applicationId "com.example.matthewtaila.rendevous"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
