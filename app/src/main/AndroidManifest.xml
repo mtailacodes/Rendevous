@@ -5,9 +5,13 @@
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="21" />
-    <uses-feature android:name="com.android.hardware.camera2.full"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-feature android:name="com.android.hardware.camera2.full" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,15 +23,14 @@
         <activity android:name=".NavigationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CameraActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-
+        <activity
+            android:name=".activity.CameraActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.Camera2Activity"></activity>
     </application>
 
 </manifest>

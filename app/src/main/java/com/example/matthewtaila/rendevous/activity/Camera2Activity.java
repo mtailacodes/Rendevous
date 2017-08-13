@@ -1,4 +1,4 @@
-package com.example.matthewtaila.rendevous.cameraClasses;
+package com.example.matthewtaila.rendevous.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -27,25 +27,29 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Bundle;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
+import android.support.annotation.RequiresApi;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
-import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.example.matthewtaila.rendevous.R;
+import com.example.matthewtaila.rendevous.cameraClasses.AutoFitTextureView;
+import com.example.matthewtaila.rendevous.cameraClasses.Camera2BasicFragment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,12 +62,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class Camera2BasicFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
-
-
-    private ConstraintLayout pictureTakenPreviewContainer;
-    private ImageView pictureTakenPreview;
+public class Camera2Activity extends AppCompatActivity {
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -197,7 +196,7 @@ public class Camera2BasicFragment extends Fragment
             mCameraOpenCloseLock.release();
             cameraDevice.close();
             mCameraDevice = null;
-            Activity activity = getActivity();
+            Activity activity = getParent();
             if (null != activity) {
                 activity.finish();
             }
@@ -345,7 +344,7 @@ public class Camera2BasicFragment extends Fragment
      * @param text The message to show
      */
     private void showToast(final String text) {
-        final Activity activity = getActivity();
+        final Activity activity = this;
         if (activity != null) {
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -405,44 +404,29 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
-    public static Camera2BasicFragment newInstance() {
-        return new Camera2BasicFragment();
-    }
+    private ImageView picture;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera2);
 
-        View rootView = inflater.inflate(R.layout.fragment_camera2_basic, container, false);
+        mTextureView = (AutoFitTextureView) findViewById(R.id.mTextureView);
+        picture = (ImageView) findViewById(R.id.picture);
 
-        pictureTakenPreviewContainer = (ConstraintLayout) rootView.findViewById(R.id.pictureTakenPreviewContainer);
-        pictureTakenPreview = (ImageView) rootView.findViewById(R.id.iv_pictureTaken);
-
-        return rootView;
+        picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture();
+            }
+        });
     }
 
-    @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
-//        view.findViewById(R.id.info).setOnClickListener(this);
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-    }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
-    }
-
-    @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         startBackgroundThread();
-
-        // When the screen is turned off and turned back on, the SurfaceTexture is already
-        // available, and "onSurfaceTextureAvailable" will not be called. In that case, we can open
-        // a camera and start preview from here (otherwise, we wait until the surface is ready in
-        // the SurfaceTextureListener).
         if (mTextureView.isAvailable()) {
             openCamera(mTextureView.getWidth(), mTextureView.getHeight());
         } else {
@@ -451,17 +435,18 @@ public class Camera2BasicFragment extends Fragment
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         closeCamera();
         stopBackgroundThread();
         super.onPause();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestCameraPermission() {
-        if (FragmentCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-            new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
+        if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
+            new ConfirmationDialog().show(getFragmentManager(), FRAGMENT_DIALOG);
         } else {
-            FragmentCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA_PERMISSION);
         }
     }
@@ -471,8 +456,8 @@ public class Camera2BasicFragment extends Fragment
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                ErrorDialog.newInstance(getString(R.string.request_permission))
-                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+                Camera2BasicFragment.ErrorDialog.newInstance(getString(R.string.request_permission))
+                        .show(getFragmentManager(), FRAGMENT_DIALOG);
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -486,7 +471,7 @@ public class Camera2BasicFragment extends Fragment
      * @param height The height of available size for camera preview
      */
     private void setUpCameraOutputs(int width, int height) {
-        Activity activity = getActivity();
+        Activity activity = this;
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
             for (String cameraId : manager.getCameraIdList()) {
@@ -586,10 +571,7 @@ public class Camera2BasicFragment extends Fragment
         } catch (CameraAccessException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-            // Currently an NPE is thrown when the Camera2API is used but not supported on the
-            // device this code runs.
-            ErrorDialog.newInstance(getString(R.string.camera_error))
-                    .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+            e.printStackTrace();
         }
     }
 
@@ -597,14 +579,16 @@ public class Camera2BasicFragment extends Fragment
      * Opens the camera specified by {@link Camera2BasicFragment#mCameraId}.
      */
     private void openCamera(int width, int height) {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            requestCameraPermission();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestCameraPermission();
+            }
             return;
         }
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
-        Activity activity = getActivity();
+        Activity activity = this;
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
@@ -735,7 +719,7 @@ public class Camera2BasicFragment extends Fragment
      * @param viewHeight The height of `mTextureView`
      */
     private void configureTransform(int viewWidth, int viewHeight) {
-        Activity activity = getActivity();
+        Activity activity = this;
         if (null == mTextureView || null == mPreviewSize || null == activity) {
             return;
         }
@@ -808,7 +792,7 @@ public class Camera2BasicFragment extends Fragment
      */
     private void captureStillPicture() {
         try {
-            final Activity activity = getActivity();
+            final Activity activity = this;
             if (null == activity || null == mCameraDevice) {
                 return;
             }
@@ -837,25 +821,15 @@ public class Camera2BasicFragment extends Fragment
                     Log.d(TAG, mFile.toString());
                     Log.d(TAG, "PICTURE TAKEN");
 
-                    File outputDir = getActivity().getCacheDir();
 
-                    try {
-                        File outputFile = File.createTempFile("test", null, outputDir);
-                        final Activity activity = getActivity();
-                        Glide.with(activity)
-                                .load(new File(outputFile.getPath()))
-                                .into(pictureTakenPreview);
+                    // todo cache file
 
-                        String uri = outputFile.getPath();
-                        Log.d("URI", uri);
-                        showUserImage(uri);
-
-                        
-
-                        Log.d(TAG, outputFile.toString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        mCacheFile = File.createTempFile(mFile, null, getActivity().getCacheDir());
+//                        Log.d(TAG, "PICTURE CACHED");
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                     unlockFocus();
                 }
             };
@@ -866,6 +840,7 @@ public class Camera2BasicFragment extends Fragment
             e.printStackTrace();
         }
     }
+
 
     /**
      * Retrieves the JPEG orientation from the specified screen rotation.
@@ -902,33 +877,6 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.picture: {
-                takePicture();
-                break;
-            }
-//            case R.id.info: {
-//                Activity activity = getActivity();
-//                if (null != activity) {
-//                    new AlertDialog.Builder(activity)
-//                            .setMessage("asd")
-//                            .setPositiveButton(android.R.string.ok, null)
-//                            .show();
-//                }
-//                break;
-//            }
-        }
-    }
-
-
-    public void showUserImage(String url){
-
-
-
-        pictureTakenPreviewContainer.animate().translationY(pictureTakenPreviewContainer.getMeasuredHeight()).setDuration(300).start();
-    }
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
         if (mFlashSupported) {
@@ -1002,8 +950,8 @@ public class Camera2BasicFragment extends Fragment
 
         private static final String ARG_MESSAGE = "message";
 
-        public static ErrorDialog newInstance(String message) {
-            ErrorDialog dialog = new ErrorDialog();
+        public static Camera2BasicFragment.ErrorDialog newInstance(String message) {
+            Camera2BasicFragment.ErrorDialog dialog = new Camera2BasicFragment.ErrorDialog();
             Bundle args = new Bundle();
             args.putString(ARG_MESSAGE, message);
             dialog.setArguments(args);
@@ -1033,7 +981,9 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+
             final Fragment parent = getParentFragment();
+
             return new AlertDialog.Builder(getActivity())
                     .setMessage(R.string.request_permission)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -1057,5 +1007,4 @@ public class Camera2BasicFragment extends Fragment
                     .create();
         }
     }
-
 }

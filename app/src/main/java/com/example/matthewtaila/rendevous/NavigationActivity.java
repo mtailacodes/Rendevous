@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.matthewtaila.rendevous.activity.Camera2Activity;
 import com.example.matthewtaila.rendevous.activity.CameraActivity;
 import com.example.matthewtaila.rendevous.databinding.ActivityNavigationBinding;
 
@@ -23,6 +24,7 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
 
     private void setOnClickListeners() {
         mActivityNavigationBinding.cameraActivityButton.setOnClickListener(this);
+        mActivityNavigationBinding.camera2ActivityButton.setOnClickListener(this);
     }
 
     @Override
@@ -31,6 +33,10 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
             case R.id.cameraActivityButton:
                 Intent intent = new Intent(this, CameraActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.camera2ActivityButton:
+                Intent Cintent = new Intent(this, Camera2Activity.class);
+                startActivity(Cintent);
                 break;
         }
     }
