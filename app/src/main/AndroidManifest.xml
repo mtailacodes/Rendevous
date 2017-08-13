@@ -29,8 +29,9 @@
         </activity>
         <activity
             android:name=".activity.CameraActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.Camera2Activity"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.Camera2Activity" />
+        <activity android:name=".activity.PicturePreviewActivity"></activity>
     </application>
 
 </manifest>

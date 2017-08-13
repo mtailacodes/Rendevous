@@ -46,6 +46,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.matthewtaila.rendevous.R;
+import com.example.matthewtaila.rendevous.model.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -431,7 +435,7 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        mFile = new File(getActivity().getExternalFilesDir(null), "test.jpg");
     }
 
     @Override
@@ -842,21 +846,16 @@ public class Camera2BasicFragment extends Fragment
                     try {
                         File outputFile = File.createTempFile("test", null, outputDir);
                         final Activity activity = getActivity();
-                        Glide.with(activity)
-                                .load(new File(outputFile.getPath()))
-                                .into(pictureTakenPreview);
-
-                        String uri = outputFile.getPath();
+                        String uri = mFile.getPath();
                         Log.d("URI", uri);
-                        showUserImage(uri);
 
-                        
+                        EventBus.getDefault().post(new MessageEvent("PICTURE CAPTURED", uri));
 
                         Log.d(TAG, outputFile.toString());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    unlockFocus();
+//                    unlockFocus();
                 }
             };
 
