@@ -7,13 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.matthewtaila.rendevous.activity.Camera2Activity;
 import com.example.matthewtaila.rendevous.activity.CameraActivity;
+import com.example.matthewtaila.rendevous.activity.CustomCameraActivity;
 import com.example.matthewtaila.rendevous.databinding.ActivityNavigationBinding;
 
 public class NavigationActivity extends AppCompatActivity implements View.OnClickListener {
+
     ActivityNavigationBinding mActivityNavigationBinding;
+    private Button customActivityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,9 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
     private void setOnClickListeners() {
         mActivityNavigationBinding.cameraActivityButton.setOnClickListener(this);
         mActivityNavigationBinding.camera2ActivityButton.setOnClickListener(this);
+
+        customActivityButton = mActivityNavigationBinding.customCameraActivityButton;
+        customActivityButton.setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +44,10 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
             case R.id.camera2ActivityButton:
                 Intent Cintent = new Intent(this, Camera2Activity.class);
                 startActivity(Cintent);
+                break;
+            case R.id.customCameraActivityButton:
+                Intent intent3 = new Intent(this, CustomCameraActivity.class);
+                startActivity(intent3);
                 break;
         }
     }

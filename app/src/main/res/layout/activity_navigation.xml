@@ -25,6 +25,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cameraActivityButton"/>
 
+        <Button android:id="@+id/customCameraActivityButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="custom camera Activity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/camera2ActivityButton"/>
+
     </android.support.constraint.ConstraintLayout>
 
 </layout>
