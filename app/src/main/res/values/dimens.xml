@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="imageTakenHeight">320dp</dimen>
+    <dimen name="imageTakenHeight">460dp</dimen>
+    <dimen name="imagePreviewHeight">300dp</dimen>
+    <dimen name="imagePreviewWidth">300dp</dimen>
+    <dimen name="imagePreviewMarginTop">32dp</dimen>
 </resources>

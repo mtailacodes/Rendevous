@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.example.matthewtaila.rendevous.activity.Camera2Activity;
 import com.example.matthewtaila.rendevous.activity.CameraActivity;
+import com.example.matthewtaila.rendevous.activity.CameraLandingPageActivity;
 import com.example.matthewtaila.rendevous.activity.CustomCameraActivity;
 import com.example.matthewtaila.rendevous.databinding.ActivityNavigationBinding;
 
@@ -29,7 +30,7 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
     private void setOnClickListeners() {
         mActivityNavigationBinding.cameraActivityButton.setOnClickListener(this);
         mActivityNavigationBinding.camera2ActivityButton.setOnClickListener(this);
-
+        mActivityNavigationBinding.libraryCamera2.setOnClickListener(this);
         customActivityButton = mActivityNavigationBinding.customCameraActivityButton;
         customActivityButton.setOnClickListener(this);
     }
@@ -48,6 +49,10 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
             case R.id.customCameraActivityButton:
                 Intent intent3 = new Intent(this, CustomCameraActivity.class);
                 startActivity(intent3);
+                break;
+            case R.id.libraryCamera2:
+                Intent intent4 = new Intent(this, CameraLandingPageActivity.class);
+                startActivity(intent4);
                 break;
         }
     }
