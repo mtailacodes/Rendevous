@@ -33,7 +33,8 @@
         <activity android:name=".activity.Camera2Activity" />
         <activity android:name=".activity.PicturePreviewActivity" />
         <activity android:name=".activity.CustomCameraActivity" />
-        <activity android:name=".activity.CameraLandingPageActivity"></activity>
+        <activity android:name=".activity.CameraLandingPageActivity" />
+        <activity android:name=".activity.SignInActivity"></activity>
     </application>
 
 </manifest>

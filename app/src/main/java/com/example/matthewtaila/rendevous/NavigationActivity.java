@@ -13,6 +13,7 @@ import com.example.matthewtaila.rendevous.activity.Camera2Activity;
 import com.example.matthewtaila.rendevous.activity.CameraActivity;
 import com.example.matthewtaila.rendevous.activity.CameraLandingPageActivity;
 import com.example.matthewtaila.rendevous.activity.CustomCameraActivity;
+import com.example.matthewtaila.rendevous.activity.SignInActivity;
 import com.example.matthewtaila.rendevous.databinding.ActivityNavigationBinding;
 
 public class NavigationActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,6 +30,7 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
 
     private void setOnClickListeners() {
         mActivityNavigationBinding.cameraActivityButton.setOnClickListener(this);
+        mActivityNavigationBinding.kotlinSignInActivity.setOnClickListener(this);
         mActivityNavigationBinding.camera2ActivityButton.setOnClickListener(this);
         mActivityNavigationBinding.libraryCamera2.setOnClickListener(this);
         customActivityButton = mActivityNavigationBinding.customCameraActivityButton;
@@ -53,6 +55,10 @@ public class NavigationActivity extends AppCompatActivity implements View.OnClic
             case R.id.libraryCamera2:
                 Intent intent4 = new Intent(this, CameraLandingPageActivity.class);
                 startActivity(intent4);
+                break;
+            case R.id.kotlinSignInActivity:
+                Intent intent5 = new Intent(this, SignInActivity.class);
+                startActivity(intent5);
                 break;
         }
     }

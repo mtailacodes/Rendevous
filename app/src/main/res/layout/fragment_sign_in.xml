@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <ImageView android:id="@+id/iv_topSeperator"
+        android:layout_width="200dp"
+        android:layout_height="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.35"
+        app:srcCompat="@drawable/border_seperater_red" />
+
+    <EditText android:id="@+id/et_insertUserName"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/iv_topSeperator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:hint="Username"
+        android:textColorHint="#DDDDDD"
+        android:textAlignment="center"
+        android:background="@android:color/transparent"
+        android:cursorVisible="false"/>
+
+    <EditText android:id="@+id/et_insertEmail"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/iv_topSeperator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:hint="Password"
+        android:textColorHint="#DDDDDD"
+        android:textAlignment="center"
+        android:background="@android:color/transparent"
+        android:cursorVisible="false"/>
+
+    <ImageView android:id="@+id/iv_loginContainer"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:background= "@drawable/background_login_red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_insertEmail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.65"/>
+
+    <ImageView android:id="@+id/done"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="@+id/iv_loginContainer"
+        app:layout_constraintEnd_toEndOf="@+id/iv_loginContainer"
+        app:layout_constraintTop_toTopOf="@+id/iv_loginContainer"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_loginContainer"
+        app:srcCompat="@drawable/icon_asset_done"/>
+
+
+</android.support.constraint.ConstraintLayout>

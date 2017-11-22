@@ -5,21 +5,15 @@ import android.animation.ObjectAnimator;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.YuvImage;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 
-import com.bumptech.glide.Glide;
 import com.example.matthewtaila.rendevous.R;
 import com.example.matthewtaila.rendevous.databinding.ActivityCameraLandingPageBinding;
 import com.flurgle.camerakit.CameraListener;
-
-import java.io.ByteArrayOutputStream;
-
-import static com.flurgle.camerakit.R.id.picture;
 
 public class CameraLandingPageActivity extends AppCompatActivity implements View.OnClickListener{
 

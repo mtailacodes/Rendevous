@@ -7,4 +7,8 @@
 
     <color name="selectionGreen">#27ae60</color>
     <color name="selectionRed">#c0392b</color>
+
+
+    <!--base colors-->
+    <color name="white">#FFFFFF</color>
 </resources>
